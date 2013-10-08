@@ -1,26 +1,29 @@
 #!/usr/bin/python2
 import json
+
 try:
     from urllib.parse import quote
 except:
     from urllib import quote
-class relaxx:
 
-    def __init__(self,relaxxurl="http://lounge.mpd.shack/"):
-        self.baseurl=relaxxurl
+
+class relaxx:
+    r = None  # the request session
+
+    def __init__(self, relaxxurl="http://lounge.mpd.shack/"):
+        self.baseurl = relaxxurl
         import requests
-        ret = requests.get(relaxxurl) # grab cookie
-        try:
-            self.r = requests.session(cookies=ret.cookies,headers={"Referer":relaxxurl})
-        except:
-            print ("you are missing the `requests` dependency, please do a `pip install requests`")
+        self.r = requests.Session()
+        self.r.get(relaxxurl)  # grab cookie
+        self.r.headers.update({"Referer": relaxxurl})
+
     def _status(self,value=0,data="json=null"):
         """
         value is some weird current playlist value, 0 seems to work
         data is url encoded kv-store
         """
         # TODO get the current playlist value
-        url=self.baseurl+"include/controller-ping.php?value=%s"%value
+        url = self.baseurl+"include/controller-ping.php?value=%s" % value
         return self.r.post(url,data="json=null").text
 
     def _playlist(self,action,value="",json="null",method="get"):
@@ -132,10 +135,11 @@ class relaxx:
             return ""
 
 if __name__ == "__main__":
+    print("Called as Main")
     r = relaxx()
     print(r.state())
     print(r.playing())
-    print(r.add_radio("http://deluxetelevision.com/livestreams/radio/DELUXE_RADIO.pls"))
+    #print(r.add_radio("http://deluxetelevision.com/livestreams/radio/DELUXE_RADIO.pls"))
     #print r.clear()
     #print r.add_radio("http://somafm.com/lush.pls")
     #print r.get_first()["Id"]
