@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
     name='relaxxapi',
     packages=['relaxxapi'],
-    version='0.15dev',
+    version='0.2dev',
     description='A Wrapper around the RelaxxPlayer MPD Web Interface',
     author='Felix Richter',
     license='WTFPL',

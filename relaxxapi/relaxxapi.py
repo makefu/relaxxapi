@@ -123,16 +123,23 @@ class relaxx:
     def is_running(self):
         return self.state()["status"]["state"] == "play"
 
-    def playing(self):
+    def get_current(self):
         """ returns "" if not running
         """
         state = self.state()
         if state["status"]["state"] == "play" :
             ident = state["status"]["song"]
-            current = state["playlist"]["file"][int(ident)]
+            return state["playlist"]["file"][int(ident)]
+
+        else:
+            return {}
+    def playing(self):
+        current = self.get_current()
+        if current:
             return current.get("Name",current.get("Artist","unkown artist")) + " - " + current.get("Title","unknown title")
         else:
             return ""
+
 
 if __name__ == "__main__":
     print("Called as Main")
