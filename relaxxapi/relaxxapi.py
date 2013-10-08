@@ -1,6 +1,9 @@
 #!/usr/bin/python2
 import json
-from urllib import quote
+try:
+    from urllib.parse import quote
+except:
+    from urllib import quote
 class relaxx:
 
     def __init__(self,relaxxurl="http://lounge.mpd.shack/"):
@@ -66,9 +69,9 @@ class relaxx:
         return self.r.get(url).text
 
     def add_radio(self,playlist=""):
-        print playlist
-        print self._radio(playlist)
-        print json.loads(self._radio(playlist)) #[1:-1])["url"]
+        print(playlist)
+        print(self._radio(playlist))
+        print(json.loads(self._radio(playlist))) #[1:-1])["url"]
         resolved_url= json.loads(self._radio(playlist)[1:-1])["url"]
         self.add_song(resolved_url)
 
@@ -130,9 +133,9 @@ class relaxx:
 
 if __name__ == "__main__":
     r = relaxx()
-    print r.state()
-    print r.playing()
-    print r.add_radio("http://deluxetelevision.com/livestreams/radio/DELUXE_RADIO.pls")
+    print(r.state())
+    print(r.playing())
+    print(r.add_radio("http://deluxetelevision.com/livestreams/radio/DELUXE_RADIO.pls"))
     #print r.clear()
     #print r.add_radio("http://somafm.com/lush.pls")
     #print r.get_first()["Id"]
