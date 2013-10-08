@@ -1,1 +1,1 @@
-from relaxxapi import *
+from .relaxxapi import relaxx
