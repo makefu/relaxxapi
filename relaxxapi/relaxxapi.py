@@ -85,10 +85,10 @@ class relaxx:
     def prev_song(self):
         return json.loads(self._playback("prevSong"))
     def get_first(self):
-        return json.loads(self._playlist("getPlaylistInfo","0",""))[0]
+        return json.loads(self.state['playlist']['file'][0])
 
     def get_last(self):
-        return json.loads(self._playlist("getPlaylistInfo","0",""))[-1]
+        return json.loads(self.state['playlist']['file'][-1])
 
     def clear(self):
         return self._playlist("clear")
