@@ -80,7 +80,10 @@ class relaxx:
 
     def add_song(self,path):
         return self._playlist("addSong",path)
-
+    def next_song(self):
+        return json.loads(self._playback("nextSong"))
+    def prev_song(self):
+        return json.loads(self._playback("prevSong"))
     def get_first(self):
         return json.loads(self._playlist("getPlaylistInfo","0",""))[0]
 
