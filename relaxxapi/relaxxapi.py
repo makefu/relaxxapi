@@ -9,12 +9,12 @@ except:
 
 class relaxx:
     r = None  # the request session
-
-    def __init__(self, relaxxurl="http://lounge.mpd.shack/"):
+    def __init__(self, relaxxurl="http://lounge.mpd.shack/",timeout=1):
         self.baseurl = relaxxurl
+        self.timeout = timeout
         import requests
         self.r = requests.Session()
-        self.r.get(relaxxurl)  # grab cookie
+        self.r.get(relaxxurl,timeout=self.timeout)  # grab cookie
         self.r.headers.update({"Referer": relaxxurl})
 
     def _status(self,value=0,data="json=null"):
@@ -24,7 +24,7 @@ class relaxx:
         """
         # TODO get the current playlist value
         url = self.baseurl+"include/controller-ping.php?value=%s" % value
-        return self.r.post(url,data="json=null").text
+        return self.r.post(url,data="json=null",timeout=self.timeout).text
 
     def _playlist(self,action,value="",json="null",method="get"):
         """
@@ -42,9 +42,9 @@ class relaxx:
         """
         url=self.baseurl+"include/controller-playlist.php?action=%s&value=%s&json=%s"%(action,value,json)
         if method== "get":
-            return self.r.get(url).text
+            return self.r.get(url,timeout=self.timeout).text
         elif method == "post":
-            return r.post(url).text
+            return r.post(url,timeout=self.timeout).text
         else:
             raise Exception("unknown method %s")
 
@@ -58,9 +58,9 @@ class relaxx:
         url=self.baseurl+"include/controller-playback.php?action=%s&value=%s&json=%s"%(action,value,json)
         # probably obsolete because everything is "get"
         if method== "get":
-            return self.r.get(url).text
+            return self.r.get(url,timeout=self.timeout).text
         elif method == "post":
-            return r.post(url).text
+            return r.post(url,timeout=self.timeout).text
         else:
             raise Exception("unknown method %s")
 
@@ -69,7 +69,7 @@ class relaxx:
         both, post and get the url seem to work here...
         """
         url=self.baseurl+"include/controller-netradio.php?playlist=%s"%quote(playlist)
-        return self.r.get(url).text
+        return self.r.get(url,timeout=self.timeout).text
 
     def add_radio(self,playlist=""):
         print(playlist)
@@ -85,10 +85,10 @@ class relaxx:
     def prev_song(self):
         return json.loads(self._playback("prevSong"))
     def get_first(self):
-        return json.loads(self.state['playlist']['file'][0])
+        return self.state()['playlist']['file'][0]
 
     def get_last(self):
-        return json.loads(self.state['playlist']['file'][-1])
+        return self.state()['playlist']['file'][-1]
 
     def clear(self):
         return self._playlist("clear")
